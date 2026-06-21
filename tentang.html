@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang='id'>
+<head>
+<meta charset='UTF-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0'>
+<title>EkonoMap — Tentang</title>
+<link rel='icon' href='assets/favicon.ico'>
+<link href='https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap' rel='stylesheet'>
+<link rel='stylesheet' href='css/style.css'>
+</head>
+<body data-page='tentang'>
+<div class='app'>
+  <aside class='sidebar' id='sidebar'>
+    <div class='brand'><img src='assets/logo.png' alt=''> EkonoMap</div>
+    <a class='nav-link' href='dashboard.html'><span class='i'>🏠</span> Dashboard</a>
+    <a class='nav-link' href='pdb.html'><span class='i'>📊</span> Statistik PDB</a>
+    <a class='nav-link' href='inflasi.html'><span class='i'>📈</span> Inflasi</a>
+    <a class='nav-link' href='ekspor-impor.html'><span class='i'>🚢</span> Ekspor-Impor</a>
+    <a class='nav-link' href='kalkulator.html'><span class='i'>🧮</span> Kalkulator</a>
+    <a class='nav-link active' href='tentang.html'><span class='i'>ℹ️</span> Tentang</a>
+    <div class='side-foot'>Data bersumber dari API Badan Pusat Statistik (BPS)</div>
+  </aside>
+  <div class='overlay' id='overlay'></div>
+
+  <main class='main'>
+    <div class='topbar'>
+      <div class='tl'>
+        <button class='hamburger' id='hamburger'>☰</button>
+        <div><h1>Tentang EkonoMap</h1><p>Portal visualisasi data ekonomi Indonesia</p></div>
+      </div>
+    </div>
+
+    <section class='card' style='margin-bottom:18px'>
+      <div class='section-title'>🎯 Tujuan</div>
+      <p style='font-size:14.5px;line-height:1.8'>EkonoMap adalah portal sumber informasi pertumbuhan ekonomi Indonesia. Kami menyajikan data indikator makroekonomi — Produk Domestik Bruto (PDB), inflasi, serta nilai ekspor-impor — dalam bentuk visualisasi interaktif yang mudah dipahami oleh pelajar, peneliti, maupun masyarakat umum.</p>
+    </section>
+
+    <section class='grid-2' style='margin-bottom:18px'>
+      <div class='card'>
+        <div class='section-title'>📊 Sumber Data</div>
+        <ul style='font-size:14px;line-height:2.1;list-style:none'>
+          <li>🏛️ Badan Pusat Statistik (BPS) — webapi.bps.go.id</li>
+          <li>🏦 Bank Indonesia — data inflasi & moneter</li>
+          <li>🌐 World Bank — data historis global</li>
+        </ul>
+      </div>
+      <div class='card'>
+        <div class='section-title'>⚙️ Teknologi</div>
+        <ul style='font-size:14px;line-height:2.1;list-style:none'>
+          <li>💻 HTML5, CSS3, JavaScript (Vanilla)</li>
+          <li>📈 Chart.js untuk visualisasi</li>
+          <li>🗄️ Backend & database oleh tim data</li>
+          <li>🚀 Deployment di ekonomap.site</li>
+        </ul>
+      </div>
+    </section>
+    <footer class='site-footer'>Layanan ini menggunakan API <b>Badan Pusat Statistik (BPS)</b></footer>
+  </main>
+</div>
+<script src='js/api.js'></script>
+<script src='js/main.js'></script>
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang='id'>
+<head>
+<meta charset='UTF-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0'>
+<title>EkonoMap — Dashboard</title>
+<link rel='icon' href='assets/favicon.ico'>
+<link href='https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap' rel='stylesheet'>
+<link rel='stylesheet' href='css/style.css'>
+</head>
+<body data-page='dashboard'>
+<div class='app'>
+  <aside class='sidebar' id='sidebar'>
+    <div class='brand'><img src='assets/logo.png' alt=''> EkonoMap</div>
+    <a class='nav-link active' href='dashboard.html'><span class='i'>🏠</span> Dashboard</a>
+    <a class='nav-link' href='pdb.html'><span class='i'>📊</span> Statistik PDB</a>
+    <a class='nav-link' href='inflasi.html'><span class='i'>📈</span> Inflasi</a>
+    <a class='nav-link' href='ekspor-impor.html'><span class='i'>🚢</span> Ekspor-Impor</a>
+    <a class='nav-link' href='kalkulator.html'><span class='i'>🧮</span> Kalkulator</a>
+    <a class='nav-link' href='tentang.html'><span class='i'>ℹ️</span> Tentang</a>
+    <div class='side-foot'>Data bersumber dari API Badan Pusat Statistik (BPS)</div>
+  </aside>
+  <div class='overlay' id='overlay'></div>
+
+  <main class='main'>
+    <div class='topbar'>
+      <div class='tl'>
+        <button class='hamburger' id='hamburger' title='Buka/Tutup Menu'>☰</button>
+        <div><h1>Dashboard</h1><p>Ringkasan indikator ekonomi Indonesia</p></div>
+      </div>
+      <div style='text-align:right'>
+        <span class='badge-live'><span class='dot'></span> Terhubung ke BPS</span>
+        <div id='lastUpdate' style='font-size:12px;color:var(--muted);margin-top:6px'></div>
+      </div>
+    </div>
+
+    <section class='kpi-grid' id='kpiGrid'></section>
+
+    <section class='content-grid'>
+      <div class='card'>
+        <div class='section-title'>Pertumbuhan PDB (%) — Tren Tahunan</div>
+        <div class='chart-box'><canvas id='chartGrowth'></canvas></div>
+      </div>
+      <div class='card'>
+        <div class='section-title'>Ringkasan Terkini</div>
+        <ul id='summaryList' style='list-style:none'></ul>
+      </div>
+    </section>
+
+    <div class='insight' id='insightBox'>Memuat insight…</div>
+    <footer class='site-footer'>Layanan ini menggunakan API <b>Badan Pusat Statistik (BPS)</b></footer>
+  </main>
+</div>
+<script src='https://cdn.jsdelivr.net/npm/chart.js'></script>
+<script src='js/api.js'></script>
+<script src='js/charts.js'></script>
+<script src='js/main.js'></script>
+</body>
+</html>

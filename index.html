@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang='id'>
+<head>
+<meta charset='UTF-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0'>
+<title>EkonoMap — Peta Data Ekonomi Indonesia</title>
+<meta name='description' content='Portal visualisasi data pertumbuhan ekonomi Indonesia: PDB, inflasi, ekspor-impor. Bersumber dari Badan Pusat Statistik (BPS).'>
+<link rel='icon' href='assets/favicon.ico'>
+<link rel='preconnect' href='https://fonts.googleapis.com'>
+<link href='https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap' rel='stylesheet'>
+<link rel='stylesheet' href='css/style.css'>
+</head>
+<body data-page='landing'>
+
+<nav class='nav'>
+  <div class='container'>
+    <a class='nav-brand' href='index.html'><span class='logo-badge'><img src='assets/logo.png' alt='EkonoMap'></span> EkonoMap</a>
+    <div class='nav-links'>
+      <a href='#fitur'>Fitur</a>
+      <a href='#sumber'>Sumber Data</a>
+      <a href='dashboard.html'>Dashboard</a>
+      <a href='tentang.html'>Tentang</a>
+      <a href='dashboard.html' class='btn btn-pink btn-sm'>Buka Dashboard →</a>
+    </div>
+    <button class='nav-toggle'>☰</button>
+  </div>
+</nav>
+
+<header class='hero'>
+  <div class='container'>
+    <div class='hero-text'>
+      <span class='hero-badge'><span class='dot'></span> Data resmi Badan Pusat Statistik (BPS)</span>
+      <h1>Pahami Ekonomi Indonesia dalam <span>Satu Peta Data</span></h1>
+      <p class='lead'>EkonoMap menyajikan indikator makroekonomi nasional — PDB, inflasi, dan neraca perdagangan — dalam visualisasi interaktif yang mudah dipahami.</p>
+      <div class='hero-cta'>
+        <a href='dashboard.html' class='btn btn-pink'>🚀 Jelajahi Dashboard</a>
+        <a href='#fitur' class='btn btn-ghost'>Lihat Fitur</a>
+      </div>
+      <div class='hero-stats'>
+        <div class='s'><b id='stPdb'>5.0%</b><span>Pertumbuhan PDB</span></div>
+        <div class='s'><b id='stInf'>1.6%</b><span>Inflasi YoY</span></div>
+        <div class='s'><b id='stEks'>$23B</b><span>Ekspor Bulanan</span></div>
+      </div>
+    </div>
+    <div class='hero-visual'>
+      <div class='preview-card'>
+        <div class='preview-head'><b>Dashboard EkonoMap</b><span class='pill'>● Live</span></div>
+        <div class='preview-kpis'>
+          <div class='pk green'><span>PDB (Triliun Rp)</span><b>22.139</b></div>
+          <div class='pk pink'><span>Inflasi YoY</span><b>1.57%</b></div>
+          <div class='pk green'><span>Ekspor ($Jt)</span><b>23.460</b></div>
+          <div class='pk pink'><span>Neraca</span><b>+2.240</b></div>
+        </div>
+        <div class='preview-bars'><i style='height:55%'></i><i style='height:72%'></i><i style='height:48%'></i><i style='height:85%'></i><i style='height:63%'></i><i style='height:78%'></i></div>
+      </div>
+      <div class='float-tag t1'><span class='ic' style='background:var(--grad)'>📈</span> PDB +5.03%</div>
+      <div class='float-tag t2'><span class='ic' style='background:var(--grad-pink)'>💹</span> Inflasi terkendali</div>
+    </div>
+  </div>
+</header>
+
+<div class='container'>
+  <div class='strip reveal'>
+    <div class='item'><b id='stPdb2'>5.03%</b><span>Pertumbuhan PDB 2024</span></div>
+    <div class='item'><b id='stInf2'>1.57%</b><span>Inflasi Desember</span></div>
+    <div class='item'><b style='color:var(--green)'>$23.4B</b><span>Ekspor terkini</span></div>
+    <div class='item'><b style='color:var(--green)'>+$2.2B</b><span>Surplus neraca</span></div>
+  </div>
+</div>
+
+<section class='block' id='fitur'>
+  <div class='container'>
+    <div class='sec-head reveal'>
+      <div class='kicker'>Fitur Unggulan</div>
+      <h2>Semua indikator ekonomi, satu tempat</h2>
+      <p>Dirancang untuk pelajar, peneliti, dan siapa pun yang ingin memahami arah ekonomi Indonesia.</p>
+    </div>
+    <div class='feature-grid'>
+      <a href='pdb.html' class='feature reveal'><div class='ic'>📊</div><h3>Statistik PDB</h3><p>Tren Produk Domestik Bruto & laju pertumbuhan ekonomi tahunan, lengkap dengan kelola data (CRUD).</p></a>
+      <a href='inflasi.html' class='feature reveal'><div class='ic'>📈</div><h3>Inflasi Bulanan</h3><p>Pantau inflasi year-on-year dan month-to-month dalam grafik dinamis.</p></a>
+      <a href='ekspor-impor.html' class='feature reveal'><div class='ic'>🚢</div><h3>Ekspor & Impor</h3><p>Bandingkan nilai ekspor-impor dan neraca perdagangan beserta komoditas unggulan.</p></a>
+      <a href='kalkulator.html' class='feature reveal'><div class='ic'>🧮</div><h3>Kalkulator Inflasi</h3><p>Simulasikan bagaimana inflasi menggerus daya beli uang dari waktu ke waktu.</p></a>
+    </div>
+  </div>
+</section>
+
+<section class='block' id='sumber' style='background:#fff'>
+  <div class='container'>
+    <div class='sec-head reveal'>
+      <div class='kicker'>Sumber Terpercaya</div>
+      <h2>Data dari lembaga resmi</h2>
+      <p>Seluruh indikator bersumber dari data resmi pemerintah dan lembaga statistik.</p>
+    </div>
+    <div class='sources'>
+      <div class='source-pill reveal'><span class='ic'>🏛️</span> <div>Badan Pusat Statistik<small>webapi.bps.go.id</small></div></div>
+      <div class='source-pill reveal'><span class='ic'>🏦</span> <div>Bank Indonesia<small>Data inflasi & moneter</small></div></div>
+      <div class='source-pill reveal'><span class='ic'>🌐</span> <div>World Bank<small>Data historis global</small></div></div>
+    </div>
+  </div>
+</section>
+
+<section class='block'>
+  <div class='container'>
+    <div class='cta-band reveal'>
+      <h2>Siap menjelajahi data ekonomi?</h2>
+      <p>Buka dashboard interaktif EkonoMap sekarang — gratis dan tanpa registrasi.</p>
+      <a href='dashboard.html' class='btn btn-pink'>Buka Dashboard →</a>
+    </div>
+  </div>
+</section>
+
+<footer class='site-footer-land'>
+  <div class='container'>
+    <div>
+      <div class='fbrand'><img src='assets/logo.png' style='width:32px' alt=''> EkonoMap</div>
+      <p style='max-width:280px;font-size:14px'>Portal visualisasi data pertumbuhan ekonomi Indonesia.</p>
+    </div>
+    <div><b style='color:#fff;display:block;margin-bottom:8px'>Navigasi</b>
+      <a href='dashboard.html'>Dashboard</a><a href='pdb.html'>PDB</a><a href='inflasi.html'>Inflasi</a><a href='ekspor-impor.html'>Ekspor-Impor</a></div>
+    <div><b style='color:#fff;display:block;margin-bottom:8px'>Lainnya</b>
+      <a href='kalkulator.html'>Kalkulator</a><a href='tentang.html'>Tentang</a></div>
+  </div>
+  <div class='container'><div class='foot-note'>Layanan ini menggunakan API <b style='color:#fff'>Badan Pusat Statistik (BPS)</b> • © 2025 EkonoMap</div></div>
+</footer>
+
+<script src='js/api.js'></script>
+<script src='js/main.js'></script>
+</body>
+</html>

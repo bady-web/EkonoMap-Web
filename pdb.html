@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang='id'>
+<head>
+<meta charset='UTF-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0'>
+<title>EkonoMap — Statistik PDB</title>
+<link rel='icon' href='assets/favicon.ico'>
+<link href='https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap' rel='stylesheet'>
+<link rel='stylesheet' href='css/style.css'>
+</head>
+<body data-page='pdb'>
+<div class='app'>
+  <aside class='sidebar' id='sidebar'>
+    <div class='brand'><img src='assets/logo.png' alt=''> EkonoMap</div>
+    <a class='nav-link' href='dashboard.html'><span class='i'>🏠</span> Dashboard</a>
+    <a class='nav-link active' href='pdb.html'><span class='i'>📊</span> Statistik PDB</a>
+    <a class='nav-link' href='inflasi.html'><span class='i'>📈</span> Inflasi</a>
+    <a class='nav-link' href='ekspor-impor.html'><span class='i'>🚢</span> Ekspor-Impor</a>
+    <a class='nav-link' href='kalkulator.html'><span class='i'>🧮</span> Kalkulator</a>
+    <a class='nav-link' href='tentang.html'><span class='i'>ℹ️</span> Tentang</a>
+    <div class='side-foot'>Data bersumber dari API Badan Pusat Statistik (BPS)</div>
+  </aside>
+  <div class='overlay' id='overlay'></div>
+
+  <main class='main'>
+    <div class='topbar'>
+      <div class='tl'>
+        <button class='hamburger' id='hamburger'>☰</button>
+        <div><h1>Statistik PDB</h1><p>Produk Domestik Bruto & laju pertumbuhan ekonomi</p></div>
+      </div>
+      <button class='btn btn-primary' id='btnAddPdb'>+ Tambah Data</button>
+    </div>
+
+    <section class='kpi-grid' id='kpiPdb'></section>
+
+    <section class='card' style='margin-bottom:22px'>
+      <div class='section-title'>Grafik Pertumbuhan PDB Tahunan (%)</div>
+      <div class='chart-box'><canvas id='chartPdb'></canvas></div>
+    </section>
+
+    <section class='card'>
+      <div class='section-title'>Data PDB Tahunan</div>
+      <div class='table-wrap'>
+        <table>
+          <thead><tr><th>Tahun</th><th>PDB (Miliar USD)</th><th>Pertumbuhan</th><th>Status</th><th>Aksi</th></tr></thead>
+          <tbody id='pdbTableBody'></tbody>
+        </table>
+      </div>
+      <p class='footer-note'>Sumber: World Bank — GDP Indonesia (Miliar USD, harga berlaku)</p>
+    </section>
+    <footer class='site-footer'>Layanan ini menggunakan API <b>Badan Pusat Statistik (BPS)</b></footer>
+  </main>
+</div>
+
+<div class='modal' id='pdbModal'>
+  <div class='modal-box'>
+    <h3 id='pdbModalTitle'>Tambah Data PDB</h3>
+    <div class='form-group'><label>Tahun</label><input type='number' id='fTahun' placeholder='2025'></div>
+    <div class='form-group'><label>PDB (Miliar USD)</label><input type='number' id='fNilai' placeholder='1400'></div>
+    <div class='form-group'><label>Pertumbuhan (%)</label><input type='number' step='0.01' id='fGrowth' placeholder='5.03'></div>
+    <div class='form-group'><label>Status</label><select id='fStatus'><option>Tinggi</option><option>Sedang</option><option>Rendah</option></select></div>
+    <div class='modal-foot'><button class='btn btn-outline' id='pdbCancel'>Batal</button><button class='btn btn-primary' id='pdbSave'>Simpan</button></div>
+  </div>
+</div>
+
+<script src='https://cdn.jsdelivr.net/npm/chart.js'></script>
+<script src='js/api.js'></script>
+<script src='js/charts.js'></script>
+<script src='js/main.js'></script>
+</body>
+</html>

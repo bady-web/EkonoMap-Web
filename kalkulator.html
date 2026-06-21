@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang='id'>
+<head>
+<meta charset='UTF-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0'>
+<title>EkonoMap — Kalkulator Inflasi</title>
+<link rel='icon' href='assets/favicon.ico'>
+<link href='https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap' rel='stylesheet'>
+<link rel='stylesheet' href='css/style.css'>
+</head>
+<body data-page='kalkulator'>
+<div class='app'>
+  <aside class='sidebar' id='sidebar'>
+    <div class='brand'><img src='assets/logo.png' alt=''> EkonoMap</div>
+    <a class='nav-link' href='dashboard.html'><span class='i'>🏠</span> Dashboard</a>
+    <a class='nav-link' href='pdb.html'><span class='i'>📊</span> Statistik PDB</a>
+    <a class='nav-link' href='inflasi.html'><span class='i'>📈</span> Inflasi</a>
+    <a class='nav-link' href='ekspor-impor.html'><span class='i'>🚢</span> Ekspor-Impor</a>
+    <a class='nav-link active' href='kalkulator.html'><span class='i'>🧮</span> Kalkulator</a>
+    <a class='nav-link' href='tentang.html'><span class='i'>ℹ️</span> Tentang</a>
+    <div class='side-foot'>Data bersumber dari API Badan Pusat Statistik (BPS)</div>
+  </aside>
+  <div class='overlay' id='overlay'></div>
+
+  <main class='main'>
+    <div class='topbar'>
+      <div class='tl'>
+        <button class='hamburger' id='hamburger'>☰</button>
+        <div><h1>Kalkulator Inflasi</h1><p>Simulasi dampak inflasi terhadap daya beli uang</p></div>
+      </div>
+    </div>
+
+    <section class='grid-2'>
+      <div class='card'>
+        <div class='section-title'>Input Perhitungan</div>
+        <div class='form-group' id='grpNilai'>
+          <label>Nilai Uang (Rp)</label>
+          <input type='number' id='nilaiAwal' placeholder='1000000'>
+          <span class='error-msg'>Masukkan angka lebih dari 0</span>
+        </div>
+        <div class='form-group' id='grpTahun'>
+          <label>Dari Tahun</label>
+          <select id='tahunAwal'></select>
+          <label style='margin-top:12px'>Sampai Tahun</label>
+          <select id='tahunAkhir'></select>
+          <span class='error-msg'>Tahun akhir harus lebih besar dari tahun awal</span>
+        </div>
+        <button class='btn btn-primary' id='btnHitung' style='width:100%;justify-content:center'>Hitung Sekarang</button>
+        <p class='footer-note'>Asumsi rata-rata inflasi: <b id='avgInfTxt'>-</b> (dari data BPS)</p>
+      </div>
+
+      <div class='card'>
+        <div class='section-title'>Hasil Simulasi</div>
+        <div id='hasilBox' style='display:none'>
+          <p class='kpi-label' style='color:var(--muted);font-size:13px'>Daya beli setara dengan</p>
+          <p class='value' id='nilaiAkhir' style='font-size:34px;font-weight:800;color:var(--green)'>Rp 0</p>
+          <p style='font-size:13.5px;color:var(--muted)'>Daya beli berubah <span id='persenChange' class='trend-down'>0%</span> dalam <span id='durasiTxt'>0</span> tahun.</p>
+          <hr style='border:none;border-top:1px solid var(--line);margin:16px 0'>
+          <div class='chart-box' style='height:230px'><canvas id='chartKalkulator'></canvas></div>
+        </div>
+        <p id='hasilPlaceholder' style='color:var(--muted);font-size:14px'>Isi form di samping lalu klik “Hitung Sekarang” untuk melihat simulasi.</p>
+      </div>
+    </section>
+    <footer class='site-footer'>Layanan ini menggunakan API <b>Badan Pusat Statistik (BPS)</b></footer>
+  </main>
+</div>
+<script src='https://cdn.jsdelivr.net/npm/chart.js'></script>
+<script src='js/api.js'></script>
+<script src='js/charts.js'></script>
+<script src='js/kalkulator.js'></script>
+<script src='js/main.js'></script>
+</body>
+</html>
