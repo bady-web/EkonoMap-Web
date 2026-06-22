@@ -141,7 +141,7 @@ async function getInflasi(){
         return rows
           .map(r=>({tahun:+r.tahun, b:+r.bulan, nilai:+r.nilai}))
           .sort((a,b)=> a.tahun-b.tahun || a.b-b.b)
-          .map(r=>({ bulan:`${NAMA_BULAN_FULL[r.b]||r.b} ${r.tahun}`, yoy:+r.nilai.toFixed(2), mom:null }));
+          .map(r=>({ bulan:`${NAMA_BULAN_FULL[r.b]||r.b} ${r.tahun}`, bulanShort:(NAMA_BULAN[r.b]||String(r.b)), tahun:r.tahun, b:r.b, yoy:+r.nilai.toFixed(2), mom:null }));
       }
     }catch(e){ console.warn('Supabase inflasi gagal, pakai mock', e); }
   }
@@ -169,16 +169,19 @@ async function getTrade(){
         const eY = sumYear(eks), iY = sumYear(imp);
         const years = [...new Set([...Object.keys(eY), ...Object.keys(iY)].map(Number))].sort((a,b)=>a-b);
         const bulanan = years.map(t=>({ bulan:String(t), ekspor:Math.round(eY[t]||0), impor:Math.round(iY[t]||0) }));
-        // Top komoditas pada tahun terakhir
+        // Komoditas per tahun (untuk dropdown pilih tahun)
         const lastYear = years[years.length-1];
-        const sumKom = (arr)=>{ const m={}; (arr||[]).filter(r=>+r.tahun===lastYear).forEach(r=>{ const k=r.nama_komoditas||'-'; m[k]=(m[k]||0)+(+r.nilai_usd||0); }); return m; };
-        const ke = sumKom(eks), ki = sumKom(imp);
-        const names = [...new Set([...Object.keys(ke), ...Object.keys(ki)])];
-        const komoditas = names
-          .map(n=>({ nama:n, ekspor:Math.round(ke[n]||0), impor:Math.round(ki[n]||0) }))
-          .sort((a,b)=>(b.ekspor+b.impor)-(a.ekspor+a.impor))
-          .slice(0,8);
-        return { bulanan, komoditas };
+        const sumKom = (arr, yr)=>{ const m={}; (arr||[]).filter(r=>+r.tahun===yr).forEach(r=>{ const k=r.nama_komoditas||'-'; m[k]=(m[k]||0)+(+r.nilai_usd||0); }); return m; };
+        const komoditasByYear = {};
+        years.forEach(yr=>{
+          const ke = sumKom(eks, yr), ki = sumKom(imp, yr);
+          const names = [...new Set([...Object.keys(ke), ...Object.keys(ki)])];
+          komoditasByYear[yr] = names
+            .map(n=>({ nama:n, ekspor:Math.round(ke[n]||0), impor:Math.round(ki[n]||0) }))
+            .sort((a,b)=>(b.ekspor+b.impor)-(a.ekspor+a.impor))
+            .slice(0,8);
+        });
+        return { bulanan, komoditas: komoditasByYear[lastYear]||[], komoditasByYear, years };
       }
     }catch(e){ console.warn('Supabase trade gagal, pakai mock', e); }
   }

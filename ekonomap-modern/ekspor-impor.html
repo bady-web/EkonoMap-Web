@@ -3,7 +3,7 @@
 <head>
 <meta charset='UTF-8'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-<title>EkonoMap — Ekspor & Impor</title>
+<title>EkonoMap - Ekspor & Impor</title>
 <link rel='icon' href='assets/favicon.ico'>
 <link href='https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap' rel='stylesheet'>
 <link rel='stylesheet' href='css/style.css'>
@@ -29,13 +29,17 @@
         <button class='hamburger' id='hamburger'>☰</button>
         <div><h1>Ekspor & Impor</h1><p>Nilai perdagangan & neraca dagang (USD Juta)</p></div>
       </div>
-      <span class='badge-live'><span class='dot'></span> Sumber BPS</span>
+      <div style='text-align:right'>
+        <span class='badge-live'><span class='dot'></span> Terhubung ke BPS</span>
+        <div id='lastUpdate' style='font-size:12px;color:var(--muted);margin-top:6px'></div>
+      </div>
     </div>
 
+    <div class='page-toolbar'><label>Tahun data</label><select id='tradeYear' class='year-select'></select></div>
     <section class='kpi-grid' id='kpiTrade'></section>
 
     <section class='card' style='margin-bottom:22px'>
-      <div class='section-title'>Ekspor vs Impor (USD Juta)</div>
+      <div class='section-title cover'>Ekspor vs Impor (USD Juta)</div>
       <div class='chart-box'><canvas id='chartTrade'></canvas></div>
     </section>
 
@@ -47,7 +51,7 @@
           <tbody id='komoditasTableBody'></tbody>
         </table>
       </div>
-      <p class='footer-note'>Sumber: BPS — Ekspor & Impor (Var ID 1452 & 1453)</p>
+      <p class='footer-note'>Sumber: BPS, Ekspor & Impor (Var ID 1452 & 1453)</p>
     </section>
     <footer class='site-footer'>Layanan ini menggunakan API <b>Badan Pusat Statistik (BPS)</b></footer>
   </main>
@@ -61,7 +65,7 @@
   <button class='fab-btn' onclick='toggleThemePicker()' title='Ganti Tema'><i data-lucide="palette"></i></button>
   <div class='theme-picker' id='themePicker'>
     <div class='theme-swatch' data-theme='forest' onclick='setTheme("forest")' title='Forest' style='background:linear-gradient(135deg,#457359,#33543f)'></div>
-    <div class='theme-swatch' data-theme='crimson' onclick='setTheme("crimson")' title='Crimson' style='background:linear-gradient(135deg,#E11D48,#be1239)'></div>
+    <div class='theme-swatch' data-theme='crimson' onclick='setTheme("crimson")' title='Crimson' style='background:linear-gradient(135deg,#E11D48,#F59E0B)'></div>
     <div class='theme-swatch' data-theme='navy' onclick='setTheme("navy")' title='Navy' style='background:linear-gradient(135deg,#2C3E6B,#1e2d52)'></div>
     <div class='theme-swatch' data-theme='cobalt' onclick='setTheme("cobalt")' title='Cobalt' style='background:linear-gradient(135deg,#2563EB,#1d4fc0)'></div>
     <div class='theme-swatch' data-theme='indigo' onclick='setTheme("indigo")' title='Indigo' style='background:linear-gradient(135deg,#4F46E5,#3d36c0)'></div>
