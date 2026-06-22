@@ -49,9 +49,9 @@ async function initKalkulator(){
     if(!ok) return;
 
     // Compound memakai inflasi aktual tiap tahun
-    const labels=[a], vals=[Math.round(nilai)];
+    const labels=[a], vals=[Math.round(nilai)], inflPct=[null];
     let factor=1;
-    for(let y=a+1;y<=b;y++){ factor *= (1 + inflFor(y)); labels.push(y); vals.push(Math.round(nilai/factor)); }
+    for(let y=a+1;y<=b;y++){ const r=inflFor(y); factor *= (1 + r); labels.push(y); vals.push(Math.round(nilai/factor)); inflPct.push(r*100); }
     const setara = nilai/factor;
     const turun = ((setara-nilai)/nilai*100);
     const years = b-a;
@@ -63,7 +63,12 @@ async function initKalkulator(){
     pc.textContent=turun.toFixed(1)+'%'; pc.className= turun<0?'trend-down':'trend-up';
     document.getElementById('durasiTxt').textContent=years;
 
-    const draw = ()=> areaChart('chartKalkulator', labels, vals, 'Daya beli (Rp)', C_PINK);
+    const tip = {
+      title: (items)=> 'Tahun '+items[0].label,
+      label: (ctx)=> 'Daya beli: Rp '+new Intl.NumberFormat('id-ID').format(ctx.parsed.y),
+      afterLabel: (ctx)=>{ const p=inflPct[ctx.dataIndex]; return (p==null)?'Tahun dasar (inflasi 0%)':('Inflasi '+ctx.label+': '+p.toFixed(2)+'%'); }
+    };
+    const draw = ()=> areaChart('chartKalkulator', labels, vals, 'Daya beli (Rp)', C_PINK, {tooltip:tip});
     draw(); window.__redraw = draw;
   });
 }

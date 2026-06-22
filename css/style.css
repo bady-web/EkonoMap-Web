@@ -319,3 +319,6 @@ html[data-theme="indigo"]{--green-rgb:79,70,229;--pink-rgb:52,211,153;--hero-dar
 .about-note svg{width:22px;height:22px;stroke:var(--green);flex:0 0 auto}
 @media(max-width:980px){.team-grid{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:560px){.team-grid{grid-template-columns:repeat(2,1fr)}}
+
+/* Tentang: ikon + judul sejajar kiri (rapi) */
+.section-title.with-ic{justify-content:flex-start}

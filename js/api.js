@@ -167,7 +167,7 @@ async function getTrade(){
       if((eks && eks.length) || (imp && imp.length)){
         const sumYear = (arr)=>{ const m={}; (arr||[]).forEach(r=>{ const t=+r.tahun; m[t]=(m[t]||0)+(+r.nilai_usd||0); }); return m; };
         const eY = sumYear(eks), iY = sumYear(imp);
-        const years = [...new Set([...Object.keys(eY), ...Object.keys(iY)].map(Number))].sort((a,b)=>a-b);
+        const years = [...new Set([...Object.keys(eY), ...Object.keys(iY)].map(Number))].filter(y=>y>=2017).sort((a,b)=>a-b);
         const bulanan = years.map(t=>({ bulan:String(t), ekspor:Math.round(eY[t]||0), impor:Math.round(iY[t]||0) }));
         // Komoditas per tahun (untuk dropdown pilih tahun)
         const lastYear = years[years.length-1];

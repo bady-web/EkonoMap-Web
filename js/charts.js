@@ -9,10 +9,11 @@ function _ctx(id){ const el=document.getElementById(id); if(!el) return null; co
 function makeGradient(canvas, color){ const ctx=canvas.getContext('2d'); const g=ctx.createLinearGradient(0,0,0,300); g.addColorStop(0,color+'55'); g.addColorStop(1,color+'05'); return g; }
 function _axes(){ const t=TC(); return {y:{grid:{color:t.grid},ticks:{color:t.tick}},x:{grid:{display:false},ticks:{color:t.tick}}}; }
 
-function areaChart(id, labels, data, label, color){
+function areaChart(id, labels, data, label, color, opts){
   const el=_ctx(id); if(!el) return; color=pickColor(color);
+  const tooltip = (opts && opts.tooltip) ? {callbacks:opts.tooltip} : {};
   new Chart(el,{type:'line',data:{labels,datasets:[{label,data,borderColor:color,backgroundColor:makeGradient(el,color),fill:true,tension:.4,borderWidth:3,pointBackgroundColor:'#fff',pointBorderColor:color,pointBorderWidth:2,pointRadius:4,pointHoverRadius:6}]},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:_axes()}});
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip},scales:_axes()}});
 }
 function lineChart(id, labels, data, label, color){
   const el=_ctx(id); if(!el) return; color=pickColor(color||'green');
