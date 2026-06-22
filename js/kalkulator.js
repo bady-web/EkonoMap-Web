@@ -35,5 +35,6 @@ async function initKalkulator(){
     const labels=[], vals=[];
     for(let i=0;i<=years;i++){ labels.push(a+i); vals.push(Math.round(nilai/Math.pow(1+avgInf,i))); }
     areaChart('chartKalkulator', labels, vals, 'Daya beli (Rp)', C_PINK);
+    window.__redraw=()=>areaChart('chartKalkulator', labels, vals, 'Daya beli (Rp)', C_PINK);
   });
 }

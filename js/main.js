@@ -12,8 +12,9 @@ function setupSidebar(){
   if(overlay) overlay.addEventListener('click', ()=>app.classList.remove('mobile-open'));
 }
 const fmt = (n)=> new Intl.NumberFormat('id-ID').format(Math.round(n));
-function fmtTanggal(d){ return d ? new Intl.DateTimeFormat('id-ID',{day:'numeric',month:'long',year:'numeric',hour:'2-digit',minute:'2-digit',timeZone:'Asia/Jakarta'}).format(d)+' WIB' : '—'; }
+function fmtTanggal(d){ return d ? new Intl.DateTimeFormat('id-ID',{day:'numeric',month:'long',year:'numeric',hour:'2-digit',minute:'2-digit',timeZone:'Asia/Jakarta'}).format(d)+' WIB' : '-'; }
 const tagClass = (s)=> s==='Tinggi'?'tinggi':s==='Sedang'?'sedang':'rendah';
+function showLastUpdated(){ getLastUpdated().then(d=>{ const e=document.getElementById('lastUpdate'); if(e) e.textContent = d ? ('Data terakhir diperbarui: '+fmtTanggal(d)) : ''; }); }
 
 /* ====== Landing ====== */
 async function initLanding(){
@@ -55,6 +56,7 @@ async function initDashboard(){
   document.getElementById('kpiGrid').innerHTML = kpis.map(k=>
     `<div class='kpi'><div class='label'>${k.label}</div><div class='value'>${k.val}</div><div class='sub ${k.up?'trend-up':'trend-down'}'>${k.sub}</div></div>`).join('');
   areaChart('chartGrowth', pdb.map(d=>d.tahun), pdb.map(d=>d.pertumbuhan), 'Pertumbuhan PDB (%)', C_PINK);
+  window.__redraw=()=>areaChart('chartGrowth', pdb.map(d=>d.tahun), pdb.map(d=>d.pertumbuhan), 'Pertumbuhan PDB (%)', C_PINK);
   const sum = [
     ['Pertumbuhan PDB'+(last?' '+last.tahun:''), last? last.pertumbuhan+'%' : 'Belum ada data'],
     ['Inflasi terkini ('+li.bulan+')', li.yoy+'%'],
@@ -65,15 +67,16 @@ async function initDashboard(){
     `<li style='display:flex;justify-content:space-between;border-bottom:1px solid var(--line);padding:9px 0'><span style='color:var(--muted)'>${s[0]}</span><b>${s[1]}</b></li>`).join('');
   const box=document.getElementById('insightBox');
   if(box) box.innerHTML = (last && prev)
-    ? `💡 Ekonomi tumbuh <b>${last.pertumbuhan}%</b> di ${last.tahun} (dari ${prev.pertumbuhan}% di ${prev.tahun}), dengan inflasi terkendali di <b>${li.yoy}%</b>.`
-    : `💡 Data PDB belum tersedia. Inflasi terkini tercatat <b>${li.yoy}%</b> (${li.bulan}).`;
-  getLastUpdated().then(d=>{ const e=document.getElementById('lastUpdate'); if(e) e.textContent = d ? ('Data terakhir diperbarui: '+fmtTanggal(d)) : ''; });
+    ? `Ekonomi tumbuh <b>${last.pertumbuhan}%</b> di ${last.tahun} (dari ${prev.pertumbuhan}% di ${prev.tahun}), dengan inflasi terkendali di <b>${li.yoy}%</b>.`
+    : `Data PDB belum tersedia. Inflasi terkini tercatat <b>${li.yoy}%</b> (${li.bulan}).`;
+  showLastUpdated();
 }
 
 /* ====== PDB + CRUD ====== */
 let editingTahun = null;
 async function initPdb(){
   await renderPdb();
+  showLastUpdated();
   const modal=document.getElementById('pdbModal');
   document.getElementById('btnAddPdb').addEventListener('click', ()=>openPdbModal());
   document.getElementById('pdbCancel').addEventListener('click', ()=>modal.classList.remove('open'));
@@ -89,7 +92,7 @@ async function renderPdb(){
       {l:'Jumlah Data',v:0,s:'baris tercatat',up:true}
     ].map(k=>`<div class='kpi'><div class='label'>${k.l}</div><div class='value'>${k.v}</div><div class='sub ${k.up?'trend-up':'trend-down'}'>${k.s}</div></div>`).join('');
     barChart('chartPdb', [], [], 'Pertumbuhan (%)');
-    document.getElementById('pdbTableBody').innerHTML = `<tr><td colspan='5' style='text-align:center;color:var(--muted);padding:24px'>Belum ada data PDB. Data akan muncul otomatis saat database terisi — atau klik <b>+ Tambah Data</b> untuk menambah manual.</td></tr>`;
+    document.getElementById('pdbTableBody').innerHTML = `<tr><td colspan='5' style='text-align:center;color:var(--muted);padding:24px'>Belum ada data PDB. Data akan muncul otomatis saat database terisi, atau klik <b>+ Tambah Data</b> untuk menambah manual.</td></tr>`;
     return;
   }
   const last=data[data.length-1];
@@ -102,6 +105,7 @@ async function renderPdb(){
     {l:'Jumlah Data',v:data.length,s:'baris tercatat',up:true}
   ].map(k=>`<div class='kpi'><div class='label'>${k.l}</div><div class='value'>${k.v}</div><div class='sub ${k.up?'trend-up':'trend-down'}'>${k.s}</div></div>`).join('');
   barChart('chartPdb', data.map(d=>d.tahun), data.map(d=>d.pertumbuhan), 'Pertumbuhan (%)');
+  window.__redraw=()=>barChart('chartPdb', data.map(d=>d.tahun), data.map(d=>d.pertumbuhan), 'Pertumbuhan (%)');
   document.getElementById('pdbTableBody').innerHTML = data.map(d=>
     `<tr><td><b>${d.tahun}</b></td><td>${fmt(d.nilai)}</td><td>${d.pertumbuhan}%</td><td><span class='tag ${tagClass(d.status)}'>${d.status}</span></td>
      <td><div class='row-actions'><button class='icon-btn' onclick='openPdbModal(${d.tahun})'>✏️</button><button class='icon-btn del' onclick='removePdb(${d.tahun})'>🗑️</button></div></td></tr>`).join('');
@@ -135,6 +139,7 @@ async function removePdb(tahun){ if(confirm('Hapus data tahun '+tahun+'?')){ awa
 /* ====== Inflasi ====== */
 async function initInflasi(){
   const data = await getInflasi();
+  showLastUpdated();
   const li=data[data.length-1];
   const avg=(data.reduce((s,d)=>s+d.yoy,0)/data.length).toFixed(2);
   const max=data.reduce((a,b)=>b.yoy>a.yoy?b:a), min=data.reduce((a,b)=>b.yoy<a.yoy?b:a);
@@ -145,6 +150,7 @@ async function initInflasi(){
     {l:'Terendah',v:min.yoy+'%',s:min.bulan,up:true}
   ].map(k=>`<div class='kpi'><div class='label'>${k.l}</div><div class='value'>${k.v}</div><div class='sub ${k.up?'trend-up':'trend-down'}'>${k.s}</div></div>`).join('');
   areaChart('chartInflasi', data.map(d=>d.bulan), data.map(d=>d.yoy), 'Inflasi Bulanan (MoM, %)', C_GREEN);
+  window.__redraw=()=>areaChart('chartInflasi', data.map(d=>d.bulan), data.map(d=>d.yoy), 'Inflasi Bulanan (MoM, %)', C_GREEN);
   document.getElementById('inflasiTableBody').innerHTML=data.map(d=>
     `<tr><td><b>${d.bulan}</b></td><td>${d.yoy}%</td></tr>`).join('');
 }
@@ -152,6 +158,7 @@ async function initInflasi(){
 /* ====== Ekspor-Impor ====== */
 async function initTrade(){
   const t = await getTrade();
+  showLastUpdated();
   const lt=t.bulanan[t.bulanan.length-1];
   const totEks=t.bulanan.reduce((s,d)=>s+d.ekspor,0), totImp=t.bulanan.reduce((s,d)=>s+d.impor,0);
   const neraca=totEks-totImp;
@@ -162,6 +169,7 @@ async function initTrade(){
     {l:'Neraca Dagang',v:(neraca>=0?'+':'')+fmt(neraca),s:neraca>=0?'Surplus':'Defisit',up:neraca>=0}
   ].map(k=>`<div class='kpi'><div class='label'>${k.l}</div><div class='value'>${k.v}</div><div class='sub ${k.up?'trend-up':'trend-down'}'>${k.s}</div></div>`).join('');
   dualBar('chartTrade', t.bulanan.map(d=>d.bulan), t.bulanan.map(d=>d.ekspor), t.bulanan.map(d=>d.impor), 'Ekspor', 'Impor');
+  window.__redraw=()=>dualBar('chartTrade', t.bulanan.map(d=>d.bulan), t.bulanan.map(d=>d.ekspor), t.bulanan.map(d=>d.impor), 'Ekspor', 'Impor');
   document.getElementById('komoditasTableBody').innerHTML=t.komoditas.map(k=>{
     const n=k.ekspor-k.impor;
     return `<tr><td><b>${k.nama}</b></td><td>${fmt(k.ekspor)}</td><td>${fmt(k.impor)}</td><td class='${n>=0?'trend-up':'trend-down'}'>${(n>=0?'+':'')+fmt(n)}</td></tr>`;
@@ -174,4 +182,5 @@ document.addEventListener('DOMContentLoaded', ()=>{
   const p = document.body.dataset.page;
   const routes = {landing:window.initLanding, dashboard:window.initDashboard, pdb:window.initPdb, inflasi:window.initInflasi, trade:window.initTrade, kalkulator:window.initKalkulator};
   (routes[p]||function(){})();
+  window.addEventListener('themechange', ()=>{ if(typeof window.__redraw==='function') window.__redraw(); });
 });
