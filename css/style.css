@@ -277,3 +277,45 @@ html[data-theme="indigo"]{--green-rgb:79,70,229;--pink-rgb:52,211,153;--hero-dar
 .fab-btn svg{width:24px;height:24px;stroke:#fff}
 
 .section-title.cover{background:var(--grad);color:#fff;margin:-22px -22px 18px;padding:15px 22px;border-radius:var(--radius) var(--radius) 0 0;font-size:16px}
+
+/* ===== v3 adjustments ===== */
+/* Card hover effect (shadow mengikuti tema) */
+.card{transition:transform .25s ease, box-shadow .25s ease}
+.card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg)}
+/* Tombol CTA navbar tetap putih saat di-scroll */
+.nav.scrolled .nav-links a.btn{color:#fff}
+.nav.scrolled .nav-links a.btn:hover{color:#fff}
+/* Toolbar pemilih tahun */
+.page-toolbar{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+.page-toolbar label{font-size:13px;color:var(--muted);font-weight:600}
+.year-select{font-family:inherit;font-size:13.5px;font-weight:600;color:var(--ink);background:#fff;border:1.5px solid var(--line);border-radius:10px;padding:7px 12px;cursor:pointer;outline:none;transition:.15s}
+.year-select:hover,.year-select:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(var(--green-rgb),.12)}
+.year-select option{color:var(--ink)}
+/* Pencil/trash icon di tombol aksi tabel */
+.icon-btn{display:inline-grid;place-items:center}
+.icon-btn svg{width:15px;height:15px;stroke:var(--green)}
+.icon-btn.del svg{stroke:var(--pink-d)}
+/* ===== Tentang (About) page ===== */
+.section-title .ti{width:34px;height:34px;border-radius:10px;background:var(--green-l);display:inline-grid;place-items:center;margin-right:10px;vertical-align:middle}
+.section-title .ti svg{width:18px;height:18px;stroke:var(--green)}
+.about-list{font-size:14px;list-style:none;margin:0}
+.about-list li{display:flex;gap:12px;align-items:flex-start;padding:11px 0;border-bottom:1px solid var(--line)}
+.about-list li:last-child{border-bottom:none}
+.about-list .li-ic{flex:0 0 auto;width:36px;height:36px;border-radius:10px;background:var(--green-l);display:grid;place-items:center}
+.about-list .li-ic svg{width:18px;height:18px;stroke:var(--green)}
+.about-list b{display:block;font-size:14px}
+.about-list small{color:var(--muted);font-size:12.5px;line-height:1.5}
+.team-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:16px}
+.team-card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:22px 16px;text-align:center;box-shadow:var(--shadow);transition:transform .25s ease,box-shadow .25s ease}
+.team-card:hover{transform:translateY(-5px);box-shadow:var(--shadow-lg)}
+.team-card .avatar{width:88px;height:88px;border-radius:50%;object-fit:cover;margin:0 auto 13px;display:block;border:3px solid var(--green-l);background:var(--bg)}
+.team-card h4{font-size:14.5px;font-weight:700;margin-bottom:4px;line-height:1.32}
+.team-card .role{font-size:12px;color:var(--muted)}
+.team-card .socials{display:flex;justify-content:center;gap:12px;margin-top:12px}
+.team-card .socials a{color:var(--muted);display:grid;place-items:center;transition:.15s}
+.team-card .socials a:hover{color:var(--green)}
+.team-card .socials svg{width:16px;height:16px}
+.about-note{background:var(--green-l);border:1px solid var(--line);border-radius:var(--radius);padding:15px 20px;font-size:13.5px;display:flex;gap:12px;align-items:center}
+.about-note svg{width:22px;height:22px;stroke:var(--green);flex:0 0 auto}
+@media(max-width:980px){.team-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:560px){.team-grid{grid-template-columns:repeat(2,1fr)}}
