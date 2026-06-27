@@ -156,6 +156,26 @@ async function getInflasi(){
   await delay(150); return structuredClone(MOCK.inflasi);
 }
 
+/* INFLASI TAHUNAN -> dihitung dari inflasi bulanan (MoM) tiap tahun:
+   inflasi_tahun = (∏(1 + mom/100) - 1) * 100
+   Dipakai untuk angka ringkasan "Inflasi Tahunan" di halaman utama.
+   `latest` memilih tahun LENGKAP (12 bulan) terakhir agar tidak menampilkan
+   angka tahun berjalan yang belum lengkap. */
+function inflasiTahunan(infArr){
+  const byMon = {};
+  (infArr||[]).forEach(d=>{ if(d.tahun){ (byMon[d.tahun] = byMon[d.tahun] || []).push(d.yoy); } });
+  const byYear = {}, count = {};
+  Object.keys(byMon).forEach(y=>{
+    byYear[+y] = +((byMon[y].reduce((p,m)=>p*(1+m/100), 1) - 1) * 100).toFixed(2);
+    count[+y] = byMon[y].length;
+  });
+  const years = Object.keys(byYear).map(Number).sort((a,b)=>a-b);
+  let ly = null;
+  for(let i=years.length-1; i>=0; i--){ if(count[years[i]] >= 12){ ly = years[i]; break; } }
+  if(ly==null) ly = years[years.length-1];
+  return { byYear, count, years, latest: (ly!=null) ? {tahun:ly, rate:byYear[ly], complete:count[ly]>=12} : null };
+}
+
 /* TRADE -> {bulanan:[{bulan, ekspor, impor}], komoditas:[{nama, ekspor, impor}]}
    Supabase 2 tabel: `ekspor` & `impor` {tahun, nama_komoditas, nilai_usd}
    - bulanan   = TREN TOTAL PER TAHUN (jumlah nilai_usd per tahun) -> label = tahun

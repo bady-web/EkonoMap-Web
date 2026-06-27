@@ -48,13 +48,27 @@ async function initLanding(){
   try{
     const [pdb, inf, trade] = await Promise.all([getPDB(), getInflasi(), getTrade()]);
     const last = pdb[pdb.length-1];
-    const li = inf[inf.length-1];
+    const infTh = inflasiTahunan(inf);
+    const infLast = infTh.latest;                 // inflasi TAHUNAN (tahun lengkap terakhir)
     const lt = trade.bulanan[trade.bulanan.length-1];
+    const neraca = lt ? (lt.ekspor - lt.impor) : 0;
     const set=(id,v)=>{const e=document.getElementById(id); if(e) e.textContent=v;};
+    // --- Hero ringkasan ---
     set('stPdb', last? (last.pertumbuhan>=0?'▲ ':'▼ ')+last.pertumbuhan+'%' : '-');
-    set('stInf', li? li.yoy+'%' : '-');
-    set('stEks', lt? '$'+fmt(lt.ekspor/1000)+'B' : '-');
-    set('stImp', lt? '$'+fmt(lt.impor/1000)+'B' : '-');
+    set('stInf', infLast? infLast.rate+'%' : '-');
+    set('stEks', lt? '$'+(lt.ekspor/1000).toFixed(1)+'B' : '-');
+    // --- Preview card + float tag ---
+    set('pvInf', infLast? infLast.rate+'%' : '-');
+    set('pvEks', lt? fmt(lt.ekspor) : '-');
+    set('pvNer', lt? (neraca>=0?'+':'')+fmt(neraca) : '-');
+    if(last) set('ftPdb', 'PDB +'+last.pertumbuhan+'%');
+    // --- Strip ---
+    set('stPdb2', last? last.pertumbuhan+'%' : '-');
+    set('stInf2', infLast? infLast.rate+'%' : '-');
+    set('stEks2', lt? '$'+(lt.ekspor/1000).toFixed(1)+'B' : '-');
+    set('stNer2', lt? (neraca>=0?'+':'')+'$'+(neraca/1000).toFixed(1)+'B' : '-');
+    if(last) set('lblPdb2', 'Pertumbuhan PDB '+last.tahun);
+    if(infLast) set('lblInf2', 'Inflasi Tahunan '+infLast.tahun);
   }catch(e){ console.warn(e); }
 }
 
