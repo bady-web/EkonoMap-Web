@@ -135,9 +135,9 @@ async function renderPdb(){
   }
   const years = data.map(d=>d.tahun);
   if(pdbYearSel===null || !years.includes(pdbYearSel)) pdbYearSel = years[years.length-1];
-  if(yearSel){ fillYearSelect(yearSel, years, pdbYearSel); yearSel.onchange = ()=>{ pdbYearSel = +yearSel.value; renderPdbKpi(); }; }
+  const drawPdb = ()=>{ const upto = data.filter(d=>d.tahun<=pdbYearSel); barChart('chartPdb', upto.map(d=>d.tahun), upto.map(d=>d.pertumbuhan), 'Pertumbuhan (%)'); };
+  if(yearSel){ fillYearSelect(yearSel, years, pdbYearSel); yearSel.onchange = ()=>{ pdbYearSel = +yearSel.value; renderPdbKpi(); drawPdb(); }; }
   renderPdbKpi();
-  const drawPdb = ()=> barChart('chartPdb', data.map(d=>d.tahun), data.map(d=>d.pertumbuhan), 'Pertumbuhan (%)');
   drawPdb(); window.__redraw = drawPdb;
   document.getElementById('pdbTableBody').innerHTML = data.map(d=>
     `<tr><td><b>${d.tahun}</b></td><td>${fmt(d.nilai)}</td><td>${d.pertumbuhan}% ${arrowMini(d.pertumbuhan>=0)}</td><td><span class='tag ${tagClass(d.status)}'>${d.status}</span></td>
@@ -203,15 +203,23 @@ function renderInflasi(){
   const all = infData;
   const rows = infYearSel ? all.filter(d=>d.tahun===infYearSel) : all;
   const li = rows[rows.length-1];
-  const avg=(rows.reduce((s,d)=>s+d.yoy,0)/rows.length).toFixed(2);
+  const avgNum = rows.reduce((s,d)=>s+d.yoy,0)/rows.length;
+  const avg = avgNum.toFixed(2);
   const max=rows.reduce((a,b)=>b.yoy>a.yoy?b:a), min=rows.reduce((a,b)=>b.yoy<a.yoy?b:a);
   const liIdx = all.indexOf(li); const liPrev = liIdx>0 ? all[liIdx-1] : null;
   const liUp = liPrev ? (li.yoy>=liPrev.yoy) : null;
+  // Pembanding rata-rata vs tahun sebelumnya
+  const allYears = [...new Set(all.map(d=>d.tahun).filter(Boolean))].sort((a,b)=>a-b);
+  const prevYear = infYearSel ? allYears.filter(y=>y<infYearSel).pop() : null;
+  const prevRows = prevYear ? all.filter(d=>d.tahun===prevYear) : [];
+  const prevAvg = prevRows.length ? (prevRows.reduce((s,d)=>s+d.yoy,0)/prevRows.length) : null;
+  const avgUp = (prevAvg!=null) ? (avgNum>=prevAvg) : null;
+  const avgSub = (prevAvg!=null) ? ('lebih '+(avgUp?'tinggi':'rendah')+' dari '+prevYear) : (rows.length+' bulan');
   const kpis=[
     {label:'Inflasi Terkini ('+(li.bulanShort||li.bulan)+')', val:li.yoy+'%', sub:(liUp===null?'Bulanan (MoM)':('vs bln lalu '+(liUp?'naik':'turun'))), up:liUp},
-    {label:'Rata-rata'+(infYearSel?(' '+infYearSel):''), val:avg+'%', sub:rows.length+' bulan', up:null},
-    {label:'Tertinggi', val:max.yoy+'%', sub:(max.bulanShort||max.bulan), up:null},
-    {label:'Terendah', val:min.yoy+'%', sub:(min.bulanShort||min.bulan), up:null}
+    {label:'Rata-rata'+(infYearSel?(' '+infYearSel):''), val:avg+'%', sub:avgSub, up:avgUp},
+    {label:'Tertinggi', val:max.yoy+'%', sub:(max.bulanShort||max.bulan), up:true},
+    {label:'Terendah', val:min.yoy+'%', sub:(min.bulanShort||min.bulan), up:false}
   ];
   document.getElementById('kpiInflasi').innerHTML = kpis.map(kpiCard).join('');
   const labels = rows.map(d=> d.bulanShort || d.bulan);
@@ -257,7 +265,7 @@ function renderTrade(){
     {label:'Total Ekspor (semua tahun)', val:fmt(totEks), sub:t.bulanan.length+' tahun data', up:null}
   ];
   document.getElementById('kpiTrade').innerHTML = kpis.map(kpiCard).join('');
-  const draw = ()=> dualBar('chartTrade', t.bulanan.map(d=>d.bulan), t.bulanan.map(d=>d.ekspor), t.bulanan.map(d=>d.impor), 'Ekspor', 'Impor');
+  const draw = ()=>{ const upto = t.bulanan.filter(d=>+d.bulan<=tradeYearSel); dualBar('chartTrade', upto.map(d=>d.bulan), upto.map(d=>d.ekspor), upto.map(d=>d.impor), 'Ekspor', 'Impor'); };
   draw(); window.__redraw = draw;
   const kom = (t.komoditasByYear && t.komoditasByYear[tradeYearSel]) ? t.komoditasByYear[tradeYearSel] : t.komoditas;
   document.getElementById('komoditasTableBody').innerHTML = kom.map(k=>{
